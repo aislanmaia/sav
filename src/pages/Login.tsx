@@ -1,5 +1,6 @@
+import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '../providers/AuthContext'
+import { useAuth } from '../providers/AuthProvider'
 
 const LoginPage = () => {
   type LocationProps = {
@@ -12,15 +13,19 @@ const LoginPage = () => {
   let location = useLocation() as unknown as LocationProps
   let auth = useAuth()
 
+  console.log('Login page')
+  console.log(useAuth())
+
   let from = location.state?.from?.pathname || '/'
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    let formData = new FormData(event.currentTarget)
-    let username = formData.get('username') as string
+    const formData = new FormData(event.currentTarget)
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
 
-    auth.signIn({ username }, () => {
+    auth.signIn({ email, password }, () => {
       navigate(from, { replace: true })
     })
   }
@@ -40,6 +45,7 @@ const LoginPage = () => {
             <input
               type="email"
               id="email"
+              name="email"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="email@email.com"
               required
@@ -56,6 +62,7 @@ const LoginPage = () => {
             <input
               type="password"
               id="password"
+              name="password"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Senha de acesso"
               required
