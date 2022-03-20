@@ -12,15 +12,15 @@ const SignUp = () => {
   const handleSubmit = () => {}
 
   return (
-    <div className="flex flex-col justify-center md:items-center md:h-screen">
-      <div className="flex flex-col md:w-96 md:items-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h3 className="text-2xl pb-8 font-bold">Tech Visita</h3>
-        <h2 className="text-2xl pb-8">Cadastro de Funcionário</h2>
+    <div className="flex flex-col justify-center md:h-screen md:items-center">
+      <div className="mb-4 flex flex-col rounded bg-white px-8 pt-6 pb-8 shadow-md md:w-96 md:items-center">
+        <h3 className="pb-8 text-2xl font-bold">Tech Visita</h3>
+        <h2 className="pb-8 text-2xl">Cadastro de Funcionário</h2>
         <form onSubmit={handleSubmit} className="w-full">
           <div className="mb-6">
             <label
               htmlFor="name"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
             >
               Nome
             </label>
@@ -29,7 +29,7 @@ const SignUp = () => {
               id="name"
               name="name"
               value={name}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
               placeholder="Nome do funcionário"
               onChange={(e) => setName(e.target.value)}
             />
@@ -37,7 +37,7 @@ const SignUp = () => {
           <div className="mb-6">
             <label
               htmlFor="email"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
             >
               Email
             </label>
@@ -46,7 +46,7 @@ const SignUp = () => {
               id="email"
               name="email"
               value={email}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
               placeholder="email@email.com"
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -54,7 +54,7 @@ const SignUp = () => {
           <div className="mb-6">
             <label
               htmlFor="password"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
             >
               Senha
             </label>
@@ -63,7 +63,7 @@ const SignUp = () => {
               id="password"
               name="password"
               value={password}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
               placeholder="Senha de acesso"
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -71,7 +71,7 @@ const SignUp = () => {
           <div className="mb-6">
             <label
               htmlFor="passwordConfirmation"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
             >
               Confirmação de senha
             </label>
@@ -80,7 +80,7 @@ const SignUp = () => {
               id="passwordConfirmation"
               name="name"
               value={passwordConfirmation}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
               placeholder="Repita a senha acima"
               onChange={(e) => setPasswordConfirmation(e.target.value)}
             />
@@ -88,7 +88,7 @@ const SignUp = () => {
           <div className="mb-6">
             <label
               htmlFor="registry"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
             >
               Matrícula
             </label>
@@ -97,7 +97,7 @@ const SignUp = () => {
               id="registry"
               name="registry"
               value={registry}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
               placeholder="Número de matrícula"
               onChange={(e) => setRegistry(e.target.value)}
             />
@@ -106,28 +106,28 @@ const SignUp = () => {
           <div className="mb-6">
             <label
               htmlFor="registry"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
             >
               Tipo de Funcionário
             </label>
             <select
               className="
                 form-select
+                text-md
+                focus:shadow-outline
                 mb-3
-                shadow
-                appearance-none
                 block
                 w-full
-                px-2
-                py-1
-                text-md text-gray-700
-                leading-tight
-                bg-white bg-clip-padding bg-no-repeat
-                border border-solid border-gray-300
+                appearance-none
                 rounded
+                border border-solid
+                border-gray-300
+                bg-white bg-clip-padding bg-no-repeat
+                px-2 py-1 leading-tight
+                text-gray-700
+                shadow
                 transition
-                ease-in-out
-                focus:text-gray-700 focus:bg-white focus:outline-none focus:shadow-outline
+                ease-in-out focus:bg-white focus:text-gray-700 focus:outline-none
               "
               name="employeeType"
               id="employeeType"
@@ -137,14 +137,14 @@ const SignUp = () => {
             </select>
           </div>
 
-          <div className="flex items-center justify-between mt-12">
+          <div className="mt-12 flex items-center justify-between">
             <Link to="/login" className="no-underline hover:underline">
               Voltar
             </Link>
 
             <button
               type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
             >
               Entrar
             </button>
