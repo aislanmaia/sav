@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { ReactPropTypes, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../providers/AuthProvider'
+
+const ErrorMessage = ({ message }: { message: string }) => (
+  <p className="text-red-500 text-xs italic">{message}</p>
+)
 
 const LoginPage = () => {
   type LocationProps = {
@@ -13,10 +17,36 @@ const LoginPage = () => {
   let location = useLocation() as unknown as LocationProps
   let auth = useAuth()
 
+  const [fields, setFields] = useState({
+    email: {
+      value: '',
+      error: false,
+    },
+    password: {
+      value: '',
+      error: false,
+    },
+  })
+
   console.log('Login page')
   console.log(useAuth())
 
   let from = location.state?.from?.pathname || '/'
+
+  function handleFieldError(field: 'email' | 'password') {
+    console.log('fields.password.value.length', fields.password.value.length)
+    if (fields.password.value.length <= 3) {
+      setFields({
+        ...fields,
+        [field]: { ...fields[field], error: true },
+      })
+      return
+    }
+    setFields({
+      ...fields,
+      [field]: { ...fields[field], error: false },
+    })
+  }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -24,6 +54,16 @@ const LoginPage = () => {
     const formData = new FormData(event.currentTarget)
     const email = formData.get('email') as string
     const password = formData.get('password') as string
+
+    if (!email) {
+      handleFieldError('email')
+      return
+    }
+
+    if (password.length <= 3) {
+      handleFieldError('password')
+      return
+    }
 
     auth.signIn({ email, password }, () => {
       navigate(from, { replace: true })
@@ -46,9 +86,15 @@ const LoginPage = () => {
               type="email"
               id="email"
               name="email"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              value={fields.email.value}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="email@email.com"
-              required
+              onChange={(e) =>
+                setFields({
+                  ...fields,
+                  email: { ...fields.email, value: e.target.value },
+                })
+              }
             />
           </div>
 
@@ -63,10 +109,22 @@ const LoginPage = () => {
               type="password"
               id="password"
               name="password"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className={`shadow appearance-none border ${
+                fields.password.error ? 'border-red-500' : ''
+              } rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline`}
               placeholder="Senha de acesso"
               required
+              onChange={(e) =>
+                setFields({
+                  ...fields,
+                  password: { ...fields.password, value: e.target.value },
+                })
+              }
+              onBlur={() => handleFieldError('password')}
             />
+            {fields.password.error ? (
+              <ErrorMessage message="Senha inválida" />
+            ) : null}
           </div>
 
           <div className="flex items-center justify-between mt-12">

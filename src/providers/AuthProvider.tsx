@@ -5,7 +5,7 @@ import { auth } from './AuthContext'
 export interface AuthContextType {
   user: Record<string, unknown> | null
   signIn: (user: Record<string, unknown>, callback: VoidFunction) => void
-  signOut: (callback: VoidFunction) => void
+  signOut: (callback?: VoidFunction) => void
 }
 
 let AuthContext = React.createContext<AuthContextType>(null!)
@@ -15,18 +15,18 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   let signIn = (
     newUser: Record<string, unknown> | null,
-    callback: VoidFunction
+    callback?: VoidFunction
   ) => {
     return auth.signIn(() => {
       setUser(newUser)
-      callback()
+      callback && callback()
     })
   }
 
-  let signOut = (callback: VoidFunction) => {
+  let signOut = (callback?: VoidFunction) => {
     return auth.signOut(() => {
       setUser(null)
-      callback()
+      callback && callback()
     })
   }
 
