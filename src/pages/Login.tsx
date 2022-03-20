@@ -73,7 +73,8 @@ const LoginPage = () => {
   return (
     <div className="flex flex-col justify-center md:items-center md:h-screen">
       <div className="flex flex-col md:w-96 md:items-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h3 className="text-2xl pb-16">Tech Visita</h3>
+        <h3 className="text-2xl pb-8 font-bold">Tech Visita</h3>
+        <h2 className="text-2xl pb-8">Entrar no sistema</h2>
         <form onSubmit={handleSubmit} className="w-full">
           <div className="mb-6">
             <label

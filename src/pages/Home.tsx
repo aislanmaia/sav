@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom'
 import { useAuth } from '../providers/AuthProvider'
 
 export default () => {
   const auth = useAuth()
+  console.log('Home page')
   console.log('auth', auth)
   return (
     <div className="flex w-screen h-screen">
