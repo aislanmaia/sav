@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
-import Home from './pages/Home'
-import LoginPage from './pages/Login'
-import SignUp from './pages/Signup'
+import Home from './app/pages/Home'
+import LoginPage from './app/pages/Login'
+import SignUp from './app/pages/Signup'
 import AuthProvider, { RequireAuth } from './providers/AuthProvider'
 
 function App() {

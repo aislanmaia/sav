@@ -1,9 +1,9 @@
-import React, { ReactPropTypes, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '../providers/AuthProvider'
+import { useAuth } from '../../providers/AuthProvider'
 
 const ErrorMessage = ({ message }: { message: string }) => (
-  <p className="text-red-500 text-xs italic">{message}</p>
+  <p className="text-xs italic text-red-500">{message}</p>
 )
 
 const LoginPage = () => {
@@ -71,15 +71,15 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center md:items-center md:h-screen">
-      <div className="flex flex-col md:w-96 md:items-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h3 className="text-2xl pb-8 font-bold">Tech Visita</h3>
-        <h2 className="text-2xl pb-8">Entrar no sistema</h2>
+    <div className="flex flex-col justify-center md:h-screen md:items-center">
+      <div className="mb-4 flex flex-col rounded bg-white px-8 pt-6 pb-8 shadow-md md:w-96 md:items-center">
+        <h3 className="pb-8 text-2xl font-bold">Tech Visita</h3>
+        <h2 className="pb-8 text-2xl">Entrar no sistema</h2>
         <form onSubmit={handleSubmit} className="w-full">
           <div className="mb-6">
             <label
               htmlFor="email"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
             >
               Email
             </label>
@@ -88,7 +88,7 @@ const LoginPage = () => {
               id="email"
               name="email"
               value={fields.email.value}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
               placeholder="email@email.com"
               onChange={(e) =>
                 setFields({
@@ -102,7 +102,7 @@ const LoginPage = () => {
           <div className="mb-6">
             <label
               htmlFor="password"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
             >
               Senha
             </label>
@@ -110,9 +110,9 @@ const LoginPage = () => {
               type="password"
               id="password"
               name="password"
-              className={`shadow appearance-none border ${
+              className={`appearance-none border shadow ${
                 fields.password.error ? 'border-red-500' : ''
-              } rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline`}
+              } focus:shadow-outline mb-3 w-full rounded py-2 px-3 leading-tight text-gray-700 focus:outline-none`}
               placeholder="Senha de acesso"
               required
               onChange={(e) =>
@@ -128,14 +128,14 @@ const LoginPage = () => {
             ) : null}
           </div>
 
-          <div className="flex items-center justify-between mt-12">
+          <div className="mt-12 flex items-center justify-between">
             <Link to="/signup" className="no-underline hover:underline">
               Novo cadastro
             </Link>
 
             <button
               type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
             >
               Entrar
             </button>
