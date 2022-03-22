@@ -1,5 +1,6 @@
 {
-  "name": "tech-visit",
+  "name": "sav",
+  "description": "Sistema de Agendamento de Visita",
   "private": true,
   "version": "0.0.0",
   "scripts": {
