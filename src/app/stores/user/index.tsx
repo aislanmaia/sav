@@ -26,7 +26,6 @@ export const useUserStore = () => {
       const result = await new LoginUserUseCase(new UserRepository()).execute(
         params
       )
-      console.log('result', result)
       if (result.isSuccess) {
         state.user.set(result.getValue())
         callback(result)

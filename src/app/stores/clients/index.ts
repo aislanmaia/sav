@@ -1,5 +1,8 @@
-import { createState, useState } from '@hookstate/core'
+import { createState, Downgraded, useState } from '@hookstate/core'
 import { Persistence } from '@hookstate/persistence'
+import ClientsRepository from '../../../data/datasources/ClientsRepository'
+import GetAllClients from '../../../domain/usecases/GetAllClients'
+import { Result } from '../../../utilities/Result'
 
 interface Address {
   street: string
@@ -9,10 +12,11 @@ interface Address {
   uf: string
 }
 
-interface Client {
+export interface Client {
+  id?: string | number
   name: string
   email: string
-  phone: string
+  phone: number
   address: Address
 }
 
@@ -27,11 +31,17 @@ const store = createState<ClientsState>({
 export const useCLientsStore = () => {
   const state = useState(store)
   state.attach(Persistence('clients'))
+  state.attach(Downgraded)
 
   return {
     get: () => state.value,
-    async getAllClients(callback?: VoidFunction) {
+    async getAllClients(callback?: (result: Result<Client[]>) => void) {
       console.log('get all clients...')
+      const result = await new GetAllClients(new ClientsRepository()).execute()
+      if (result.isSuccess) {
+        state.clients.set(result.getValue() || [])
+        callback && callback(result)
+      }
     },
   }
 }
