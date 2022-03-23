@@ -33,7 +33,7 @@ const LoginPage = () => {
   console.log('Login page')
   console.log(useAuth())
 
-  let from = location.state?.from?.pathname || '/'
+  let from = location.state?.from?.pathname || '/clientes'
 
   function handleFieldError(field: 'email' | 'password') {
     console.log('fields.password.value.length', fields.password.value.length)
@@ -68,7 +68,8 @@ const LoginPage = () => {
     }
 
     store.signIn({ email, password }, () => {
-      navigate(from, { replace: true })
+      if (from === '/') navigate('/clientes', { replace: true })
+      else navigate(from, { replace: true })
     })
   }
 
