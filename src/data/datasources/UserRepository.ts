@@ -17,10 +17,7 @@ export default class UserRepository
         email: email,
         password: password,
       })
-      .then((r) => {
-        console.log('r', r)
-        return r
-      })
+      .then((res) => res.data)
       .catch((e: AxiosError) => {
         console.log('e', e)
         return Result.fail<{ status: string }>(e.code ?? '500')

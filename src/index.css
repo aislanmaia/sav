@@ -5,5 +5,5 @@
 @tailwind utilities;
 
 body {
-  @apply bg-sky-50;
+  @apply overflow-hidden bg-sky-50;
 }
