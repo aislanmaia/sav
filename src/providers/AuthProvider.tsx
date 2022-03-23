@@ -1,5 +1,6 @@
-import React from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Navigate, useLocation, Route } from 'react-router-dom'
+import { useUserStore } from '../app/stores/user'
 import UserEntity from '../domain/entities/UserEntity'
 import { Result } from '../utilities/Result'
 import { auth } from './AuthContext'
@@ -58,11 +59,13 @@ export const useAuth = () => {
   return React.useContext(AuthContext)
 }
 
-export function RequireAuth({ children }: { children: JSX.Element }) {
-  const auth = useAuth()
+export function RequireAuth({ children }: { children: Route }) {
+  // const auth = useAuth()
+  const state = useUserStore()
   const location = useLocation()
-  console.log('auth', auth)
-  if (!auth || !auth.user) {
+  console.log('require auth...')
+  console.log('user', state.get().user)
+  if (!state.get().user) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 

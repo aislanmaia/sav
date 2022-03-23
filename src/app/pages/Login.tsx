@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../providers/AuthProvider'
+import { useUserStore } from '../stores/user'
 
 const ErrorMessage = ({ message }: { message: string }) => (
   <p className="text-xs italic text-red-500">{message}</p>
@@ -15,7 +16,8 @@ const LoginPage = () => {
 
   let navigate = useNavigate()
   let location = useLocation() as unknown as LocationProps
-  let auth = useAuth()
+  // let auth = useAuth()
+  const store = useUserStore()
 
   const [fields, setFields] = useState({
     email: {
@@ -31,7 +33,7 @@ const LoginPage = () => {
   console.log('Login page')
   console.log(useAuth())
 
-  let from = location.state?.from?.pathname || '/'
+  let from = location.state?.from?.pathname || '/clientes'
 
   function handleFieldError(field: 'email' | 'password') {
     console.log('fields.password.value.length', fields.password.value.length)
@@ -65,8 +67,9 @@ const LoginPage = () => {
       return
     }
 
-    auth.signIn({ email, password }, () => {
-      navigate(from, { replace: true })
+    store.signIn({ email, password }, () => {
+      if (from === '/') navigate('/clientes', { replace: true })
+      else navigate(from, { replace: true })
     })
   }
 
