@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../providers/AuthProvider'
+import { useUserStore } from '../stores/user'
 
 const ErrorMessage = ({ message }: { message: string }) => (
   <p className="text-xs italic text-red-500">{message}</p>
@@ -15,7 +16,8 @@ const LoginPage = () => {
 
   let navigate = useNavigate()
   let location = useLocation() as unknown as LocationProps
-  let auth = useAuth()
+  // let auth = useAuth()
+  const store = useUserStore()
 
   const [fields, setFields] = useState({
     email: {
@@ -65,7 +67,7 @@ const LoginPage = () => {
       return
     }
 
-    auth.signIn({ email, password }, () => {
+    store.signIn({ email, password }, () => {
       navigate(from, { replace: true })
     })
   }
