@@ -3,6 +3,7 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/solid'
 // import { useState } from '@hookstate/core'
 import { useState } from 'react'
 import ClientUpdateDialog from './ClientUpdateDialog'
+import ClientDeleteDialog from './ClientDeleteDialog'
 
 type Props = {
   client: Client
@@ -10,6 +11,7 @@ type Props = {
 
 const ClientsListItem = ({ client }: Props) => {
   const [showUpdateDialog, setShowUpdateDialog] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const clientsStore = useCLientsStore()
 
   const handleAddress = (field: typeof client.address) =>
@@ -19,8 +21,16 @@ const ClientsListItem = ({ client }: Props) => {
     setShowUpdateDialog(!showUpdateDialog)
   }
 
+  const handleShowDeleteDialog = () => {
+    setShowDeleteDialog(!showDeleteDialog)
+  }
+
   const updateClient = async (data: Client) => {
     await clientsStore.updateClient(data)
+  }
+
+  const deleteClient = async (id: string | number) => {
+    await clientsStore.deleteClient(id)
   }
 
   return (
@@ -42,7 +52,10 @@ const ClientsListItem = ({ client }: Props) => {
           className="h-6 w-6 cursor-pointer text-gray-400"
           onClick={() => handleShowUpdateDialog()}
         />
-        <TrashIcon className="h-6 w-6 cursor-pointer text-gray-400" />
+        <TrashIcon
+          className="h-6 w-6 cursor-pointer text-gray-400"
+          onClick={() => handleShowDeleteDialog()}
+        />
       </div>
       <ClientUpdateDialog
         isOpen={showUpdateDialog}
@@ -50,6 +63,14 @@ const ClientsListItem = ({ client }: Props) => {
         client={client}
         setIsOpen={(value) => setShowUpdateDialog(value)}
         confirm={(client) => updateClient(client as Client)}
+      />
+      <ClientDeleteDialog
+        isOpen={showDeleteDialog}
+        key={Math.random() * 100000}
+        clientId={client.id!}
+        clientName={client.name}
+        setIsOpen={(value) => setShowDeleteDialog(value)}
+        confirm={(clientId) => deleteClient(clientId as string)}
       />
     </>
   )

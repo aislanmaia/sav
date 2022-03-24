@@ -2,6 +2,7 @@ import { createState, Downgraded, useState } from '@hookstate/core'
 import { Persistence } from '@hookstate/persistence'
 import ClientsRepository from '../../../data/datasources/ClientsRepository'
 import CreateClient from '../../../domain/usecases/CreateClient'
+import DeleteClient from '../../../domain/usecases/DeleteClient'
 import GetAllClients from '../../../domain/usecases/GetAllClients'
 import UpdateClient from '../../../domain/usecases/UpdateClient'
 import { Result } from '../../../utilities/Result'
@@ -69,6 +70,24 @@ export const useCLientsStore = () => {
       )
       if (result.isSuccess) {
         state.clients.merge([client])
+        callback && callback(result)
+      }
+    },
+    async deleteClient(
+      id: string | number,
+      callback?: (result: Result<Client[]>) => void
+    ) {
+      const result = await new DeleteClient(new ClientsRepository()).execute(id)
+      if (result.isSuccess) {
+        const clients = state.clients.get()
+        const foundIndex = clients.findIndex((c) => c.id === id)
+        if (foundIndex > -1) {
+          state.clients.set((c) => {
+            c.splice(foundIndex, 1)
+            return c
+          })
+        }
+
         callback && callback(result)
       }
     },

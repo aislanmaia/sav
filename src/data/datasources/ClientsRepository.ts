@@ -41,6 +41,12 @@ export default class ClientsRepository
   async deleteClient(
     clientId: string | number
   ): Promise<Result<ClientEntity | { status: string }>> {
-    throw new Error('Method not implemented.')
+    return await this.http
+      .delete(`/clients/${clientId}`)
+      .then((res) => res.data)
+      .catch((e: AxiosError) => {
+        console.log('e', e)
+        return Result.fail<{ status: string }>(e.code ?? '500')
+      })
   }
 }
