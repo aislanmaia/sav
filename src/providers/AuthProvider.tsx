@@ -3,15 +3,15 @@ import { Navigate, useLocation, Route } from 'react-router-dom'
 import { useUserStore } from '../app/stores/user'
 import UserEntity from '../domain/entities/UserEntity'
 import { Result } from '../utilities/Result'
-import { auth } from './AuthContext'
+// import { auth } from './AuthContext'
 
 export interface AuthContextType {
-  user: { email: string; password: string } | null
-  signIn: (
-    user: { email: string; password: string },
-    callback: VoidFunction
-  ) => void
-  signOut: (callback?: VoidFunction) => void
+  // user: { email: string; password: string } | null
+  // signIn: (
+  //   user: { email: string; password: string },
+  //   callback: VoidFunction
+  // ) => void
+  // signOut: (callback?: VoidFunction) => void
 }
 
 let AuthContext = React.createContext<AuthContextType>(undefined!)
@@ -26,31 +26,33 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     | undefined
   >(undefined)
 
-  let signIn = async (
-    newUser: { email: string; password: string } | null,
-    callback?: VoidFunction
-  ) => {
-    if (newUser) {
-      console.log('newUser', newUser)
-      return await auth.signIn(newUser, (result: Result<UserEntity>) => {
-        console.log('aqui')
-        if (result.isSuccess) {
-          const user = result.getValue()
-          if (user) setUser({ email: user.email, name: user.name })
-        }
-        callback && callback()
-      })
-    }
-  }
+  // let signIn = async (
+  //   newUser: { email: string; password: string } | null,
+  //   callback?: VoidFunction
+  // ) => {
+  //   if (newUser) {
+  //     console.log('newUser', newUser)
+  //     return await auth.signIn(newUser, (result: Result<UserEntity>) => {
+  //       console.log('aqui')
+  //       if (result.isSuccess) {
+  //         const user = result.getValue()
+  //         if (user) setUser({ email: user.email, name: user.name })
+  //       }
+  //       callback && callback()
+  //     })
+  //   }
+  // }
 
-  let signOut = (callback?: VoidFunction) => {
-    return auth.signOut(() => {
-      setUser(null)
-      callback && callback()
-    })
-  }
+  // let signOut = (callback?: VoidFunction) => {
+  //   return auth.signOut(() => {
+  //     setUser(null)
+  //     callback && callback()
+  //   })
+  // }
 
-  let value = { user, signIn, signOut }
+  let value = {
+    /*user, signIn, signOut*/
+  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
@@ -59,13 +61,11 @@ export const useAuth = () => {
   return React.useContext(AuthContext)
 }
 
-export function RequireAuth({ children }: { children: Route }) {
-  // const auth = useAuth()
+export function RequireAuth({ children }: { children: typeof Route }) {
   const state = useUserStore()
   const location = useLocation()
-  console.log('require auth...')
-  console.log('user', state.get().user)
-  if (!state.get().user) {
+  const user = state.get().user
+  if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 

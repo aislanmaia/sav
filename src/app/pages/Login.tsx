@@ -50,7 +50,7 @@ const LoginPage = () => {
     })
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
@@ -67,7 +67,7 @@ const LoginPage = () => {
       return
     }
 
-    store.signIn({ email, password }, () => {
+    await store.signIn({ email, password }, () => {
       if (from === '/') navigate('/clientes', { replace: true })
       else navigate(from, { replace: true })
     })

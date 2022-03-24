@@ -11,13 +11,20 @@ export default class UserRepository
   async login(
     email: string,
     password: string
-  ): Promise<Result<UserEntity | { status: string }>> {
+  ): Promise<Result<UserEntity | { error: string } | { status: string }>> {
     return await this.http
-      .post<Result<UserEntity>>('/login', {
-        email: email,
-        password: password,
+      .post<Result<UserEntity | { error: string } | { status: string }>>(
+        '/login',
+        {
+          email: email,
+          password: password,
+        }
+      )
+      .then((res) => {
+        if (res.data.error)
+          return Result.fail<{ error: string }>(res.data.error)
+        return res.data
       })
-      .then((res) => res.data)
       .catch((e: AxiosError) => {
         console.log('e', e)
         return Result.fail<{ status: string }>(e.code ?? '500')

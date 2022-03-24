@@ -1,4 +1,4 @@
-import { createState, useState } from '@hookstate/core'
+import { createState, Downgraded, useState } from '@hookstate/core'
 import { Persistence } from '@hookstate/persistence'
 import UserRepository from '../../../data/datasources/UserRepository'
 import UserEntity from '../../../domain/entities/UserEntity'
@@ -16,6 +16,7 @@ const store = createState<UserState>({
 export const useUserStore = () => {
   const state = useState(store)
   state.attach(Persistence('user'))
+  state.attach(Downgraded)
 
   return {
     get: () => state.value,
@@ -29,6 +30,8 @@ export const useUserStore = () => {
       if (result.isSuccess) {
         state.user.set(result.getValue())
         callback(result)
+      } else {
+        state.user.set(undefined)
       }
     },
 
