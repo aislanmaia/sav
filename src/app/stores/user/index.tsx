@@ -32,6 +32,7 @@ export const useUserStore = () => {
         callback(result)
       } else {
         state.user.set(undefined)
+        callback(result)
       }
     },
 
