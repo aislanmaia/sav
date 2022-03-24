@@ -22,7 +22,7 @@ export default class ClientsRepository
     client: ClientEntity
   ): Promise<Result<ClientEntity | { status: string }>> {
     return await this.http
-      .post(`/clients/`, { ...client })
+      .post(`/clients`, { ...client })
       .then((res) => res.data)
       .catch((e: AxiosError) => {
         console.log('e', e)
