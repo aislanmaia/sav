@@ -3,7 +3,7 @@ import { useAuth } from '../../providers/AuthProvider'
 import ClientsList from '../components/clients/ClientsList'
 import { useCLientsStore } from '../stores/clients'
 
-export default () => {
+const Clients = () => {
   const clientsStore = useCLientsStore()
 
   useEffect(() => {
@@ -19,8 +19,10 @@ export default () => {
         </button>
       </div>
       <div>
-        <ClientsList />
+        <ClientsList key={Math.random() * 10000000} />
       </div>
     </div>
   )
 }
+
+export default Clients

@@ -19,7 +19,5 @@ export default class GetAllClients
       return Result.fail('Cannot get users')
     }
     return Result.ok(result) as unknown as Result<ClientEntity[]>
-
-    return Result.ok(result) as unknown as Result<ClientEntity[]>
   }
 }

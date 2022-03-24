@@ -1,4 +1,5 @@
 import { AxiosError } from 'axios'
+import { Client } from '../../app/stores/clients'
 import ClientEntity from '../../domain/entities/ClientEntity'
 import IClientsRepository from '../../domain/repositories/IClientsRepository'
 import { Result } from '../../utilities/Result'
@@ -17,11 +18,25 @@ export default class ClientsRepository
         return Result.fail<{ status: string }>(e.code ?? '500')
       })
   }
-  async createClient(): Promise<Result<ClientEntity | { status: string }>> {
-    throw new Error('Method not implemented.')
+  async createClient(
+    client: ClientEntity
+  ): Promise<Result<ClientEntity | { status: string }>> {
+    return await this.http
+      .post(`/clients/`, { ...client })
+      .then((res) => res.data)
+      .catch((e: AxiosError) => {
+        console.log('e', e)
+        return Result.fail<{ status: string }>(e.code ?? '500')
+      })
   }
   async updateClient(client: ClientEntity): Promise<Result<ClientEntity>> {
-    throw new Error('Method not implemented.')
+    return await this.http
+      .put(`/clients/${client.id}`, { ...client })
+      .then((res) => res.data)
+      .catch((e: AxiosError) => {
+        console.log('e', e)
+        return Result.fail<{ status: string }>(e.code ?? '500')
+      })
   }
   async deleteClient(
     clientId: string | number
