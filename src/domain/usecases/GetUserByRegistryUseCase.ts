@@ -1,9 +1,9 @@
-import IUserRepository from '../repositories/IUserRepository'
+import IUsersRepository from '../repositories/IUsersRepository'
 import { Result } from '../../utilities/Result'
 import UserEntity from '../entities/UserEntity'
 
 export default class GetUserByRegistryUseCase {
-  constructor(private repository: IUserRepository) {}
+  constructor(private repository: IUsersRepository) {}
 
   // async execute(registry: number): Promise<Result<UserEntity>> {
   //   const result = await this.repository.getUserByRegistry(registry)

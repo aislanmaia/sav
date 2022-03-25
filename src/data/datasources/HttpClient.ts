@@ -26,7 +26,7 @@ export default abstract class HttpClient {
   }
 
   #handleRequest = (config: AxiosRequestConfig) => {
-    const loggedUserData = JSON.parse(localStorage.getItem('user') ?? '{}')
+    const loggedUserData = JSON.parse(localStorage.getItem('users') ?? '{}')
     const token = loggedUserData?.user?.token
     config.headers = Object.assign({ Authorization: 'Bearer ' + token })
 

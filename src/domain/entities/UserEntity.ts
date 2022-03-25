@@ -30,7 +30,7 @@ export default class UserEntity {
 
   public static create(
     email: string,
-    type: number,
+    type: 'admin' | 'attendant' | 'technician',
     registry: number,
     name?: string,
     id?: number
@@ -44,16 +44,16 @@ export default class UserEntity {
 
     return new UserEntity({
       email,
-      type: this.#buildRole(type),
+      type,
       registry,
       name,
     })
   }
 
-  static #buildRole(role: number): 'admin' | 'attendant' | 'technician' {
-    if (role === 1) return 'admin'
-    if (role === 2) return 'attendant'
-    if (role === 3) return 'technician'
-    return 'attendant'
-  }
+  // static #buildRole(role: number): 'admin' | 'attendant' | 'technician' {
+  //   if (role === 1) return 'admin'
+  //   if (role === 2) return 'attendant'
+  //   if (role === 3) return 'technician'
+  //   return 'attendant'
+  // }
 }

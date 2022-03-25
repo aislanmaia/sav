@@ -3,7 +3,7 @@ import { BellIcon, UserCircleIcon } from '@heroicons/react/outline'
 import { Fragment } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
-import { useUserStore } from '../stores/user'
+import { useUsersStore } from '../stores/users'
 // import notify from './alerts/Notify'
 import toast, { Toaster } from 'react-hot-toast'
 import Alert from './alerts/Alert'
@@ -20,7 +20,7 @@ const AppBar = () => {
   const navigate = useNavigate()
 
   // const auth = useAuth()
-  const userStore = useUserStore()
+  const userStore = useUsersStore()
 
   console.log('AppBar user: ', userStore.get().user)
 

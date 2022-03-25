@@ -1,14 +1,43 @@
-import { useAuth } from '../../providers/AuthProvider'
+import { useEffect, useState } from 'react'
+import EmployeeNewDialog from '../components/employees/EmployeeNewDialog'
 
-export default () => {
-  const auth = useAuth()
-  console.log('Clients page')
-  console.log('auth', auth)
+import EmployeesList from '../components/employees/EmployeesList'
+import { User, useUsersStore } from '../stores/users'
+
+const Employees = () => {
+  const [showNewDialog, setShowNewDialog] = useState(false)
+  const employeesStore = useUsersStore()
+
+  const createEmployee = (data: User) => {
+    employeesStore.createUser(data)
+  }
+
+  useEffect(() => {
+    employeesStore.getAllUsers()
+  }, [])
+
   return (
-    <div className="flex h-screen w-screen">
-      <div className="flex h-full w-full place-content-center place-items-center">
-        <div className="text-6xl">Funcionários</div>
+    <div className="flex h-screen w-screen flex-col">
+      <div className="flex place-content-between p-12">
+        <div className="text-3xl font-semibold">Funcionários</div>
+        <button
+          className="w-full rounded-lg bg-indigo-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
+          onClick={() => setShowNewDialog(true)}
+        >
+          + Adicionar
+        </button>
+      </div>
+      <div>
+        <EmployeesList key={Math.random() * 10000000} />
+        {/* <EmployeeNewDialog
+          isOpen={showNewDialog}
+          key={Math.random() * 100000}
+          setIsOpen={(value) => setShowNewDialog(value)}
+          confirm={(employee) => createEmployee(employee as User)}
+        /> */}
       </div>
     </div>
   )
 }
+
+export default Employees

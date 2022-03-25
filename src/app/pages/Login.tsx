@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../providers/AuthProvider'
-import { useUserStore } from '../stores/user'
+import { useUsersStore } from '../stores/users'
 import toast, { Toaster } from 'react-hot-toast'
 
 const ErrorMessage = ({ message }: { message: string }) => (
@@ -20,7 +20,7 @@ const LoginPage = () => {
   let navigate = useNavigate()
   let location = useLocation() as unknown as LocationProps
   // let auth = useAuth()
-  const store = useUserStore()
+  const store = useUsersStore()
 
   const [fields, setFields] = useState({
     email: {
@@ -138,12 +138,9 @@ const LoginPage = () => {
             </div>
 
             <div className="mt-12 flex items-center justify-between">
-              {/* <Link to="/signup" className="no-underline hover:underline">
-              Novo cadastro
-            </Link> */}
-              <div onClick={() => toast('Here is my toast!')}>
+              <Link to="/signup" className="no-underline hover:underline">
                 Novo cadastro
-              </div>
+              </Link>
 
               <button
                 type="submit"
