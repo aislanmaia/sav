@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../providers/AuthProvider'
 import { useUserStore } from '../stores/user'
+import toast, { Toaster } from 'react-hot-toast'
 
 const ErrorMessage = ({ message }: { message: string }) => (
   <p className="text-xs italic text-red-500">{message}</p>
 )
+
+const notify = () => toast.error('Usuário ou senha incorretos!')
 
 const LoginPage = () => {
   type LocationProps = {
@@ -67,85 +70,93 @@ const LoginPage = () => {
       return
     }
 
-    await store.signIn({ email, password }, () => {
+    await store.signIn({ email, password }, (result) => {
+      console.log('signin result', result)
+      if (result.error) return notify()
       if (from === '/') navigate('/clientes', { replace: true })
       else navigate(from, { replace: true })
     })
   }
 
   return (
-    <div className="flex flex-col justify-center md:h-screen md:items-center">
-      <div className="mb-4 flex flex-col rounded bg-white px-8 pt-6 pb-8 shadow-md md:w-96 md:items-center">
-        <h3 className="pb-8 text-2xl font-bold">Tech Visita</h3>
-        <h2 className="pb-8 text-2xl">Entrar no sistema</h2>
-        <form onSubmit={handleSubmit} className="w-full">
-          <div className="mb-6">
-            <label
-              htmlFor="email"
-              className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={fields.email.value}
-              className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
-              placeholder="email@email.com"
-              onChange={(e) =>
-                setFields({
-                  ...fields,
-                  email: { ...fields.email, value: e.target.value },
-                })
-              }
-            />
-          </div>
+    <>
+      <div className="flex flex-col justify-center md:h-screen md:items-center">
+        <div className="mb-4 flex flex-col rounded bg-white px-8 pt-6 pb-8 shadow-md md:w-96 md:items-center">
+          <h3 className="pb-8 text-2xl font-bold">Tech Visita</h3>
+          <h2 className="pb-8 text-2xl">Entrar no sistema</h2>
+          <form onSubmit={handleSubmit} className="w-full">
+            <div className="mb-6">
+              <label
+                htmlFor="email"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={fields.email.value}
+                className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none"
+                placeholder="email@email.com"
+                onChange={(e) =>
+                  setFields({
+                    ...fields,
+                    email: { ...fields.email, value: e.target.value },
+                  })
+                }
+              />
+            </div>
 
-          <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              Senha
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className={`appearance-none border shadow ${
-                fields.password.error ? 'border-red-500' : ''
-              } focus:shadow-outline mb-3 w-full rounded py-2 px-3 leading-tight text-gray-700 focus:outline-none`}
-              placeholder="Senha de acesso"
-              required
-              onChange={(e) =>
-                setFields({
-                  ...fields,
-                  password: { ...fields.password, value: e.target.value },
-                })
-              }
-              onBlur={() => handleFieldError('password')}
-            />
-            {fields.password.error ? (
-              <ErrorMessage message="Senha inválida" />
-            ) : null}
-          </div>
+            <div className="mb-6">
+              <label
+                htmlFor="password"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Senha
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                className={`appearance-none border shadow ${
+                  fields.password.error ? 'border-red-500' : ''
+                } focus:shadow-outline mb-3 w-full rounded py-2 px-3 leading-tight text-gray-700 focus:outline-none`}
+                placeholder="Senha de acesso"
+                required
+                onChange={(e) =>
+                  setFields({
+                    ...fields,
+                    password: { ...fields.password, value: e.target.value },
+                  })
+                }
+                onBlur={() => handleFieldError('password')}
+              />
+              {fields.password.error ? (
+                <ErrorMessage message="Senha inválida" />
+              ) : null}
+            </div>
 
-          <div className="mt-12 flex items-center justify-between">
-            <Link to="/signup" className="no-underline hover:underline">
+            <div className="mt-12 flex items-center justify-between">
+              {/* <Link to="/signup" className="no-underline hover:underline">
               Novo cadastro
-            </Link>
+            </Link> */}
+              <div onClick={() => toast('Here is my toast!')}>
+                Novo cadastro
+              </div>
 
-            <button
-              type="submit"
-              className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
-            >
-              Entrar
-            </button>
-          </div>
-        </form>
+              <button
+                type="submit"
+                className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
+              >
+                Entrar
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+      <Toaster position="top-right" />
+    </>
   )
 }
 

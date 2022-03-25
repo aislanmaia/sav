@@ -61,13 +61,15 @@ export const useAuth = () => {
   return React.useContext(AuthContext)
 }
 
-export function RequireAuth({ children }: { children: typeof Route }) {
+export function RequireAuth({ children }: { children: React.ReactElement }) {
   const state = useUserStore()
   const location = useLocation()
   const user = state.get().user
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
+  if (location.pathname === '/')
+    return <Navigate to="/clientes" state={{ from: location }} replace />
 
   return children
 }
