@@ -26,7 +26,6 @@ export default class CreateEmployeeUseCase
       employee.password,
       employee.passwordConfirmation
     )
-    console.log('buildEmployee result employee', result.getValue())
     return result
   }
 

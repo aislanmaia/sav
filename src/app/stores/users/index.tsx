@@ -65,7 +65,6 @@ export const useUsersStore = () => {
       user: UserDTO,
       callback?: (result: UserEntity | { error: string } | undefined) => void
     ) {
-      console.log('store create employee', user)
       const result = await new CreateEmployeeUseCase(
         new EmployeesRepository()
       ).execute(user)

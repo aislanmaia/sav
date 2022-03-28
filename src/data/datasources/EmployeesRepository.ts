@@ -30,11 +30,9 @@ export default class EmployeesRepository
       role: user.type,
       ...user,
     })
-    console.log('user', user)
-    console.log('userDTO', employeeDTO)
     return await this.http
       .post(`/employees`, { ...employeeDTO })
-      .then((res) => res.data)
+      .then((res) => Result.ok(res.data))
       .catch((e: AxiosError) => {
         console.log('e', e)
         return Result.fail<{ status: string }>(e.code ?? '500')
