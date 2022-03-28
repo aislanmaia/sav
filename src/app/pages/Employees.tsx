@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react'
+import UserDTO from '../../data/dto/UserDTO'
 import EmployeeNewDialog from '../components/employees/EmployeeNewDialog'
 
 import EmployeesList from '../components/employees/EmployeesList'
-import { User, useUsersStore } from '../stores/users'
+import { useUsersStore } from '../stores/users'
 
 const Employees = () => {
   const [showNewDialog, setShowNewDialog] = useState(false)
   const employeesStore = useUsersStore()
 
-  const createEmployee = (data: User) => {
-    employeesStore.createUser(data)
+  const createEmployee = (data: UserDTO) => {
+    console.log('data', data)
+    employeesStore.createEmployee(data)
   }
 
   useEffect(() => {
@@ -29,12 +31,12 @@ const Employees = () => {
       </div>
       <div>
         <EmployeesList key={Math.random() * 10000000} />
-        {/* <EmployeeNewDialog
+        <EmployeeNewDialog
           isOpen={showNewDialog}
           key={Math.random() * 100000}
           setIsOpen={(value) => setShowNewDialog(value)}
-          confirm={(employee) => createEmployee(employee as User)}
-        /> */}
+          confirm={(employee) => createEmployee(employee as UserDTO)}
+        />
       </div>
     </div>
   )

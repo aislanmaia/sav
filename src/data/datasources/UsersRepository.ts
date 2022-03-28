@@ -30,16 +30,4 @@ export default class UsersRepository
         return Result.fail<{ status: string }>(e.code ?? '500')
       })
   }
-
-  async getAllUsers(): Promise<
-    Result<UserEntity[] | { error: string } | { status: string }>
-  > {
-    return this.http
-      .get<UserEntity[]>('/employees/all')
-      .then((res) => Result.ok(res.data))
-      .catch((e: AxiosError) => {
-        console.log('e', e)
-        return Result.fail<{ status: string }>(e.code ?? '500')
-      })
-  }
 }

@@ -6,8 +6,4 @@ export default interface IUsersRepository {
     email: string,
     password: string
   ): Promise<Result<UserEntity | { error: string } | { status: string }>>
-
-  getAllUsers(): Promise<
-    Result<UserEntity[] | { error: string } | { status: string }>
-  >
 }

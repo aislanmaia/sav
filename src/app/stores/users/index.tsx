@@ -1,21 +1,17 @@
 import { createState, Downgraded, useState } from '@hookstate/core'
 import { Persistence } from '@hookstate/persistence'
+import EmployeesRepository from '../../../data/datasources/EmployeesRepository'
 import UsersRepository from '../../../data/datasources/UsersRepository'
+import UserDTO from '../../../data/dto/UserDTO'
 import UserEntity from '../../../domain/entities/UserEntity'
-import GetAllUsersUseCase from '../../../domain/usecases/GetAllUsers'
+import CreateEmployeeUseCase from '../../../domain/usecases/CreateEmployeeUseCase'
+import GetAllUsersUseCase from '../../../domain/usecases/GetAllEmployees'
 import LoginUserUseCase from '../../../domain/usecases/LoginUserUseCase'
 import { Result } from '../../../utilities/Result'
 
-export interface User {
-  id?: string | number
-  name?: string
-  email: string
-  registry: number
-  type: 'admin' | 'attendant' | 'technician'
-}
 interface UserState {
-  user: User | undefined
-  users: User[]
+  user: UserDTO | undefined
+  users: UserDTO[]
 }
 
 const store = createState<UserState>({
@@ -32,13 +28,13 @@ export const useUsersStore = () => {
     get: () => state.value,
     async signIn(
       params: { email: string; password: string },
-      callback: (result: Result<User>) => void
+      callback: (result: Result<UserEntity>) => void
     ) {
       const result = await new LoginUserUseCase(new UsersRepository()).execute(
         params
       )
       if (result.isSuccess) {
-        state.user.set(result.getValue())
+        state.user.set(result.getValue() as UserDTO)
         callback(result)
       } else {
         state.user.set(undefined)
@@ -52,45 +48,45 @@ export const useUsersStore = () => {
     },
 
     async getAllUsers(
-      callback?: (result: User[] | { error: string } | undefined) => void
+      callback?: (result: UserDTO[] | { error: string } | undefined) => void
     ) {
       const result = await new GetAllUsersUseCase(
-        new UsersRepository()
+        new EmployeesRepository()
       ).execute()
       if (result.isSuccess) {
-        state.users.set(result.getValue() as User[])
+        state.users.set(result.getValue() as UserDTO[])
       } else {
         state.users.set([])
       }
-      callback && callback(result.getValue())
+      callback && callback(result.getValue() as UserDTO[])
     },
 
-    async createUser(
-      user: User,
-      callback?: (result: UserEntity[] | { error: string } | undefined) => void
+    async createEmployee(
+      user: UserDTO,
+      callback?: (result: UserEntity | { error: string } | undefined) => void
     ) {
-      // const result = await new GetAllUsersUseCase(
-      //   new UsersRepository()
-      // ).execute()
-      // result.getValue()
-      // if (result.isSuccess) {
-      //   state.users.set(result.getValue() as UserEntity[])
-      // } else {
-      //   state.users.set([])
-      // }
-      callback && callback(undefined)
+      console.log('store create employee', user)
+      const result = await new CreateEmployeeUseCase(
+        new EmployeesRepository()
+      ).execute(user)
+      if (result.isSuccess) {
+        state.users.merge([user])
+        callback && callback(result.getValue() as UserEntity)
+      }
     },
 
-    async updateUser(
-      user: User,
+    async updateEmployee(
+      user: UserDTO,
       callback?: (result: UserEntity | { error: string } | undefined) => void
     ) {
       callback && callback(undefined)
     },
 
-    async deleteUser(
+    async deleteEmployee(
       id: string | number,
-      callback?: (result: Result<User | { error: string }> | undefined) => void
+      callback?: (
+        result: Result<UserDTO | { error: string }> | undefined
+      ) => void
     ) {
       callback && callback(undefined)
     },

@@ -1,32 +1,41 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Dispatch, Fragment, SetStateAction, useState } from 'react'
-import { User } from '../../stores/users'
+import UserDTO from '../../../data/dto/UserDTO'
+import { UserRoles } from '../../../domain/entities/IUserEntity'
+import EmployeesRoleSelect from './EmployeesRoleSelect'
 
 type Props = {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
-  confirm: Dispatch<SetStateAction<User>>
+  confirm: Dispatch<SetStateAction<UserDTO>>
 }
 
 const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
-  let [name, setName] = useState('')
+  let [firstName, setFirstName] = useState('')
+  let [lastName, setLastName] = useState('')
   let [email, setEmail] = useState('')
-  let [phone, setPhone] = useState('')
-  let [street, setAddressStreet] = useState('')
-  let [number, setAddressNumber] = useState('')
-  let [neighborhood, setAddressNeighborhood] = useState('')
-  let [city, setAddressCity] = useState('')
-  let [uf, setAddressUf] = useState('')
+  let [registry, setRegistry] = useState('')
+  let [password, setPassword] = useState('')
+  let [passwordConfirmation, setPasswordConfirmation] = useState('')
+  let [role, setRole] = useState(UserRoles.Attendant)
 
   const handleConfirm = () => {
-    const newEmployee: User = {
-      name,
+    const newEmployee: UserDTO = new UserDTO({
       email,
-      registry: 0,
-      type: 'attendant',
-    }
+      registry: Number(registry),
+      firstname: firstName,
+      lastname: lastName,
+      role: role,
+      password,
+      passwordConfirmation,
+    })
     confirm(newEmployee)
     setIsOpen(false)
+  }
+
+  const buildRole = ({ value }: { value: string }) => {
+    if (value === 'Atendente') return setRole(UserRoles.Attendant)
+    if (value === 'Técnico') return setRole(UserRoles.Technician)
   }
 
   return (
@@ -56,7 +65,7 @@ const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
               as="h3"
               className="text-lg font-medium leading-6 text-gray-900"
             >
-              <span className="m-0 pr-2 text-2xl">Novo funcionário </span>{' '}
+              <span className="m-0 pr-2 text-2xl">Novo Funcionário </span>{' '}
             </Dialog.Title>
           </div>
           <Dialog.Description as="div" className="m-2 flex gap-x-10 pt-2">
@@ -67,24 +76,41 @@ const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
                 </div>
                 <div className="mb-6">
                   <label
-                    htmlFor="name"
+                    htmlFor="firstName"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Nome
+                    Primeiro Nome
                   </label>
                   <input
                     type="text"
-                    id="name"
-                    name="name"
-                    value={name}
+                    id="firstName"
+                    name="firstName"
+                    value={firstName}
                     className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Nome do cliente"
-                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Primeiro nome do funcionário"
+                    onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
                 <div className="mb-6">
                   <label
-                    htmlFor="name"
+                    htmlFor="lastName"
+                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Sobrenome
+                  </label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="firstName"
+                    value={lastName}
+                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
+                    placeholder="Sobrenome do funcionário"
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </div>
+                <div className="mb-6">
+                  <label
+                    htmlFor="email"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
                     Email
@@ -95,48 +121,67 @@ const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
                     name="email"
                     value={email}
                     className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Email do cliente"
+                    placeholder="Email do funcionário"
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="mb-6">
                   <label
-                    htmlFor="name"
+                    htmlFor="registry"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Telefone
+                    Matrícula
                   </label>
                   <input
                     type="text"
-                    id="phone"
-                    name="phone"
-                    value={phone}
+                    id="registry"
+                    name="registry"
+                    value={registry}
                     className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Telefone"
-                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="Número da matrícula"
+                    onChange={(e) => setRegistry(e.target.value)}
                   />
                 </div>
               </div>
             </div>
             <div className="flex flex-auto ">
               <div className="flex flex-auto flex-col">
-                <div className="text-1xl pb-4 font-semibold">Endereço</div>
+                <div className="text-1xl pb-4 font-semibold">
+                  Dados de Usuário
+                </div>
 
                 <div className="mb-6">
                   <label
-                    htmlFor="name"
+                    htmlFor="password"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Rua
+                    Senha de acesso
                   </label>
                   <input
-                    type="text"
-                    id="address"
-                    name="address"
-                    value={street}
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={password}
                     className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Rua"
-                    onChange={(e) => setAddressStreet(e.target.value)}
+                    placeholder="Senha de acesso"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <div className="mb-6">
+                  <label
+                    htmlFor="passwordConfirmation"
+                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Confirmação de senha
+                  </label>
+                  <input
+                    type="password"
+                    id="passwordConfirmation"
+                    name="passwordConfirmation"
+                    value={passwordConfirmation}
+                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
+                    placeholder="Redigite a senha"
+                    onChange={(e) => setPasswordConfirmation(e.target.value)}
                   />
                 </div>
                 <div className="mb-6">
@@ -144,67 +189,11 @@ const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
                     htmlFor="name"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Número da residência
+                    Nível de acesso
                   </label>
-                  <input
-                    type="text"
-                    id="number"
-                    name="number"
-                    value={number}
-                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Número da residência. Ex: 123"
-                    onChange={(e) => setAddressNumber(e.target.value)}
-                  />
-                </div>
-                <div className="mb-6">
-                  <label
-                    htmlFor="name"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Bairro
-                  </label>
-                  <input
-                    type="text"
-                    id="neighborhood"
-                    name="neighborhood"
-                    value={neighborhood}
-                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Bairro"
-                    onChange={(e) => setAddressNeighborhood(e.target.value)}
-                  />
-                </div>
-                <div className="mb-6">
-                  <label
-                    htmlFor="name"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Cidade
-                  </label>
-                  <input
-                    type="text"
-                    id="city"
-                    name="city"
-                    value={city}
-                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Cidade"
-                    onChange={(e) => setAddressCity(e.target.value)}
-                  />
-                </div>
-                <div className="mb-6">
-                  <label
-                    htmlFor="name"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Estado (UF)
-                  </label>
-                  <input
-                    type="text"
-                    id="uf"
-                    name="uf"
-                    value={uf}
-                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Estado (UF). Ex: SP"
-                    onChange={(e) => setAddressUf(e.target.value)}
+                  <EmployeesRoleSelect
+                    selected={{ value: role }}
+                    onChange={(value) => buildRole(value as { value: string })}
                   />
                 </div>
               </div>
