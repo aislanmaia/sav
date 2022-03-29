@@ -1,12 +1,12 @@
 import { AxiosError } from 'axios'
 import UserEntity from '../../domain/entities/UserEntity'
-import IUserRepository from '../../domain/repositories/IUserRepository'
+import IUsersRepository from '../../domain/repositories/IUsersRepository'
 import { Result } from '../../utilities/Result'
 import HttpClient from './HttpClient'
 
-export default class UserRepository
+export default class UsersRepository
   extends HttpClient
-  implements IUserRepository
+  implements IUsersRepository
 {
   async login(
     email: string,

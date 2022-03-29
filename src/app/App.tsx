@@ -19,7 +19,7 @@ function App() {
                 <Routes>
                   <Route path="/clientes" element={<Clients />} />
                   <Route path="/funcionarios" element={<Employees />} />
-                  <Route path="/clientes" element={<Clients />} />
+                  <Route path="/agendamentos" element={<h2>Agendamentos</h2>} />
                 </Routes>
               </RequireAuth>
             }
@@ -27,7 +27,6 @@ function App() {
         </Route>
 
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </AuthProvider>
   )

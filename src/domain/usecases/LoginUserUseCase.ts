@@ -1,7 +1,7 @@
 import IUseCase from '../../core/usecases/IUseCase'
 import { Result } from '../../utilities/Result'
 import UserEntity from '../entities/UserEntity'
-import IUserRepository from '../repositories/IUserRepository'
+import IUsersRepository from '../repositories/IUsersRepository'
 
 type LoginUserUseCaseParams = {
   email: string
@@ -11,7 +11,7 @@ type LoginUserUseCaseParams = {
 export default class LoginUserUseCase
   implements IUseCase<{ email: string; password: string }, UserEntity>
 {
-  constructor(private repository: IUserRepository) {}
+  constructor(private repository: IUsersRepository) {}
 
   async execute(
     credentials: LoginUserUseCaseParams

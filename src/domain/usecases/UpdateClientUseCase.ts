@@ -4,14 +4,16 @@ import { Result } from '../../utilities/Result'
 import ClientEntity from '../entities/ClientEntity'
 import IClientsRepository from '../repositories/IClientsRepository'
 
-export default class CreateClient implements IUseCase<Client, ClientEntity[]> {
+export default class UpdateClientUseCase
+  implements IUseCase<Client, ClientEntity[]>
+{
   constructor(private repository: IClientsRepository) {}
 
   async execute(client: Client): Promise<Result<ClientEntity[]>> {
-    const result = await this.repository.createClient(client as ClientEntity)
+    const result = await this.repository.updateClient(client as ClientEntity)
 
     if (result.isFailure) {
-      return Result.fail('Cannot create client')
+      return Result.fail('Cannot update client')
     }
     return Result.ok(result) as unknown as Result<ClientEntity[]>
   }

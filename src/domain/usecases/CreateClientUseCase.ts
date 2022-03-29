@@ -4,17 +4,17 @@ import { Result } from '../../utilities/Result'
 import ClientEntity from '../entities/ClientEntity'
 import IClientsRepository from '../repositories/IClientsRepository'
 
-export default class DeleteClient
-  implements IUseCase<string | number, ClientEntity[]>
+export default class CreateClientUseCase
+  implements IUseCase<Client, ClientEntity>
 {
   constructor(private repository: IClientsRepository) {}
 
-  async execute(clientId: string | number): Promise<Result<ClientEntity[]>> {
-    const result = await this.repository.deleteClient(clientId)
+  async execute(client: Client): Promise<Result<ClientEntity>> {
+    const result = await this.repository.createClient(client as ClientEntity)
 
     if (result.isFailure) {
       return Result.fail('Cannot create client')
     }
-    return Result.ok(result) as unknown as Result<ClientEntity[]>
+    return result as Result<ClientEntity>
   }
 }

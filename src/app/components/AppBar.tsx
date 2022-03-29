@@ -3,7 +3,7 @@ import { BellIcon, UserCircleIcon } from '@heroicons/react/outline'
 import { Fragment } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
-import { useUserStore } from '../stores/user'
+import { useUsersStore } from '../stores/users'
 // import notify from './alerts/Notify'
 import toast, { Toaster } from 'react-hot-toast'
 import Alert from './alerts/Alert'
@@ -20,7 +20,7 @@ const AppBar = () => {
   const navigate = useNavigate()
 
   // const auth = useAuth()
-  const userStore = useUserStore()
+  const userStore = useUsersStore()
 
   console.log('AppBar user: ', userStore.get().user)
 
@@ -110,17 +110,13 @@ const AppBar = () => {
                     className="rounded-full bg-gray-100 p-1 text-gray-400 hover:text-zinc-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                   >
                     <span className="sr-only">Ver notificações</span>
-                    <BellIcon
-                      className="h-6 w-6"
-                      aria-hidden="true"
-                      onClick={notify}
-                    />
+                    <BellIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
 
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
                     <div>
-                      <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <Menu.Button className="flex rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                         <span className="sr-only">Abrir menu de usuário</span>
                         {/* <img
                         className="h-8 w-8 rounded-full"
@@ -128,7 +124,7 @@ const AppBar = () => {
                         alt=""
                       /> */}
                         <UserCircleIcon
-                          className="h-6 w-6 text-gray-400"
+                          className="h-8 w-8 rounded-full border-2 text-gray-400 "
                           aria-hidden="true"
                         />
                       </Menu.Button>

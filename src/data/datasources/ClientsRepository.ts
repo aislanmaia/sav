@@ -11,8 +11,8 @@ export default class ClientsRepository
 {
   async getAllClients(): Promise<Result<ClientEntity[] | { status: string }>> {
     return await this.http
-      .get<Result<ClientEntity[]>>('/clients/all')
-      .then((res) => res.data)
+      .get<ClientEntity[]>('/clients/all')
+      .then((res) => Result.ok(res.data))
       .catch((e: AxiosError) => {
         console.log('e', e)
         return Result.fail<{ status: string }>(e.code ?? '500')
@@ -23,7 +23,7 @@ export default class ClientsRepository
   ): Promise<Result<ClientEntity | { status: string }>> {
     return await this.http
       .post(`/clients`, { ...client })
-      .then((res) => res.data)
+      .then((res) => Result.ok(res.data))
       .catch((e: AxiosError) => {
         console.log('e', e)
         return Result.fail<{ status: string }>(e.code ?? '500')

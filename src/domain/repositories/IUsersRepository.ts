@@ -1,7 +1,7 @@
 import { Result } from '../../utilities/Result'
 import UserEntity from '../entities/UserEntity'
 
-export default interface IUserRepository {
+export default interface IUsersRepository {
   login(
     email: string,
     password: string
