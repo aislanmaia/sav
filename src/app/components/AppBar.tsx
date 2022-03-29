@@ -79,8 +79,8 @@ const AppBar = () => {
                           className={({ isActive }) =>
                             classNames(
                               isActive
-                                ? 'bg-gray-900 text-white'
-                                : 'text-gray-700 hover:bg-gray-700 hover:text-white',
+                                ? 'bg-indigo-700 text-white'
+                                : 'text-gray-700 hover:bg-indigo-700 hover:text-white',
                               'rounded-md px-3 py-2 text-sm font-medium'
                             )
                           }
@@ -124,7 +124,7 @@ const AppBar = () => {
                         alt=""
                       /> */}
                         <UserCircleIcon
-                          className="h-8 w-8 rounded-full border-2 text-gray-400 "
+                          className="h-8 w-8 rounded-full border-2 text-gray-400 hover:text-zinc-700"
                           aria-hidden="true"
                         />
                       </Menu.Button>
