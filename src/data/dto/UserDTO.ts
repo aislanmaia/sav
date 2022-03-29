@@ -42,4 +42,10 @@ export default class UserDTO extends UserEntity {
     this.password = password
     this.passwordConfirmation = passwordConfirmation
   }
+
+  static parseToUserRole(role: string) {
+    if (role === 'Atendente') return UserRoles.Attendant
+    if (role === 'Técnico') return UserRoles.Technician
+    return UserRoles.Attendant
+  }
 }

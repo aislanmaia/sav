@@ -2,12 +2,13 @@ import { Client, useCLientsStore } from '../../stores/clients'
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid'
 // import { useState } from '@hookstate/core'
 import { useState } from 'react'
-import ClientUpdateDialog from './ClientUpdateDialog'
+import EmployeeUpdateDialog from './EmployeeUpdateDialog'
 import ClientDeleteDialog from './ClientDeleteDialog'
-import { User, useUsersStore } from '../../stores/users'
+import { useUsersStore } from '../../stores/users'
+import UserDTO from '../../../data/dto/UserDTO'
 
 type Props = {
-  employee: User
+  employee: UserDTO
 }
 
 const EmployeesListItem = ({ employee }: Props) => {
@@ -16,6 +17,7 @@ const EmployeesListItem = ({ employee }: Props) => {
   const usersStore = useUsersStore()
 
   const handleEmployeeType = (type: 'admin' | 'attendant' | 'technician') => {
+    console.log('type', type)
     switch (type) {
       case 'admin':
         return 'Admin'
@@ -36,12 +38,12 @@ const EmployeesListItem = ({ employee }: Props) => {
     setShowDeleteDialog(!showDeleteDialog)
   }
 
-  const updateEmployee = async (data: User) => {
-    await usersStore.updateUser(data)
+  const updateEmployee = async (data: UserDTO) => {
+    await usersStore.updateEmployee(data)
   }
 
   const deleteUser = async (id: string | number) => {
-    await usersStore.deleteUser(id)
+    // await usersStore.deleteUser(id)
   }
 
   return (
@@ -56,7 +58,7 @@ const EmployeesListItem = ({ employee }: Props) => {
         {employee.registry}
       </div>
       <div className="-mx-1 flex w-1/6 flex-grow items-center overflow-hidden pl-2 lg:w-1/6 xl:w-1/6">
-        {handleEmployeeType(employee.type)}
+        {handleEmployeeType(employee.role)}
       </div>
       <div className="-mx-1 flex w-1/6 items-center justify-end gap-x-4 overflow-hidden pl-2 pr-6 lg:w-1/6 xl:w-1/6">
         <PencilIcon
@@ -68,14 +70,14 @@ const EmployeesListItem = ({ employee }: Props) => {
           onClick={() => handleShowDeleteDialog()}
         />
       </div>
-      {/* <ClientUpdateDialog
+      <EmployeeUpdateDialog
         isOpen={showUpdateDialog}
         key={Math.random() * 100000}
-        client={client}
+        employee={employee}
         setIsOpen={(value) => setShowUpdateDialog(value)}
-        confirm={(client) => updateClient(client as Client)}
+        confirm={(employee) => updateEmployee(employee as UserDTO)}
       />
-      <ClientDeleteDialog
+      {/*<ClientDeleteDialog
         isOpen={showDeleteDialog}
         key={Math.random() * 100000}
         clientId={client.id!}

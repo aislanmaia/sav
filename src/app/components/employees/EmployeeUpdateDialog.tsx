@@ -1,35 +1,45 @@
+import { Fragment, Dispatch, SetStateAction, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import UserDTO from '../../../data/dto/UserDTO'
-import { UserRoles } from '../../../domain/entities/IUserEntity'
 import EmployeesRoleSelect from './EmployeesRoleSelect'
 
 type Props = {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   confirm: Dispatch<SetStateAction<UserDTO>>
+  employee: UserDTO
 }
 
-const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
-  let [firstName, setFirstName] = useState('')
-  let [lastName, setLastName] = useState('')
-  let [email, setEmail] = useState('')
-  let [registry, setRegistry] = useState('')
-  let [password, setPassword] = useState('')
-  let [passwordConfirmation, setPasswordConfirmation] = useState('')
-  let [role, setRole] = useState(UserRoles.Attendant)
+const EmployeeUpdateDialog = ({
+  isOpen,
+  setIsOpen,
+  employee,
+  confirm,
+}: Props) => {
+  let [firstName, setFirstName] = useState(employee.firstname)
+  let [lastName, setLastName] = useState(employee.lastname)
+  let [email, setEmail] = useState(employee.email)
+  let [registry, setRegistry] = useState(employee.registry)
+  // let [password, setPassword] = useState(employee.password)
+  // let [passwordConfirmation, setPasswordConfirmation] = useState(
+  // employee.passwordConfirmation
+  // )
+  let [role, setRole] = useState(employee.role)
 
   const handleConfirm = () => {
-    const newEmployee: UserDTO = new UserDTO({
-      email,
-      registry: Number(registry),
+    const updatedEmployee: UserDTO = {
+      id: employee.id,
       firstname: firstName,
       lastname: lastName,
-      role: role,
-      password,
-      passwordConfirmation,
-    })
-    confirm(newEmployee)
+      email,
+      registry,
+      // password,
+      // passwordConfirmation,
+      role,
+      type: role,
+      name: '',
+    }
+    confirm(updatedEmployee)
     setIsOpen(false)
   }
 
@@ -64,7 +74,8 @@ const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
               as="h3"
               className="text-lg font-medium leading-6 text-gray-900"
             >
-              <span className="m-0 pr-2 text-2xl">Novo Funcionário </span>{' '}
+              <span className="m-0 pr-2 text-2xl">Editar Funcionário </span>{' '}
+              <b className="text-1xl">{employee.name}</b>
             </Dialog.Title>
           </div>
           <Dialog.Description as="div" className="m-2 flex gap-x-10 pt-2">
@@ -138,7 +149,7 @@ const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
                     value={registry}
                     className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
                     placeholder="Número da matrícula"
-                    onChange={(e) => setRegistry(e.target.value)}
+                    onChange={(e) => setRegistry(Number(e.target.value))}
                   />
                 </div>
               </div>
@@ -149,40 +160,6 @@ const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
                   Dados de Usuário
                 </div>
 
-                <div className="mb-6">
-                  <label
-                    htmlFor="password"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Senha de acesso
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={password}
-                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Senha de acesso"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <div className="mb-6">
-                  <label
-                    htmlFor="passwordConfirmation"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Confirmação de senha
-                  </label>
-                  <input
-                    type="password"
-                    id="passwordConfirmation"
-                    name="passwordConfirmation"
-                    value={passwordConfirmation}
-                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Redigite a senha"
-                    onChange={(e) => setPasswordConfirmation(e.target.value)}
-                  />
-                </div>
                 <div className="mb-6">
                   <label
                     htmlFor="name"
@@ -221,4 +198,4 @@ const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
   )
 }
 
-export default EmployeeNewDialog
+export default EmployeeUpdateDialog

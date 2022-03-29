@@ -4,7 +4,9 @@ import { Result } from '../../utilities/Result'
 import ClientEntity from '../entities/ClientEntity'
 import IClientsRepository from '../repositories/IClientsRepository'
 
-export default class UpdateClient implements IUseCase<Client, ClientEntity[]> {
+export default class UpdateClientUseCase
+  implements IUseCase<Client, ClientEntity[]>
+{
   constructor(private repository: IClientsRepository) {}
 
   async execute(client: Client): Promise<Result<ClientEntity[]>> {

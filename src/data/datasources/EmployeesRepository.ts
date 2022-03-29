@@ -24,18 +24,35 @@ export default class EmployeesRepository
   async createEmployee(
     user: UserEntity
   ): Promise<Result<UserEntity | { error: string } | { status: string }>> {
-    const employeeDTO = new UserDTO({
-      firstname: user.name.split(' ')[0],
-      lastname: user.name.split(' ')[1],
-      role: user.type,
-      ...user,
-    })
+    const employeeDTO = this.#buildEmployeeDTO(user)
     return await this.http
       .post(`/employees`, { ...employeeDTO })
-      .then((res) => Result.ok(res.data))
+      .then((res) => Result.ok(new UserDTO({ ...res.data })))
       .catch((e: AxiosError) => {
         console.log('e', e)
         return Result.fail<{ status: string }>(e.code ?? '500')
       })
+  }
+
+  async updateEmployee(
+    employee: UserEntity
+  ): Promise<Result<UserEntity | { error: string } | { status: string }>> {
+    const employeeDTO = this.#buildEmployeeDTO(employee)
+    return await this.http
+      .put(`/employees/${employee.id}`, { ...employeeDTO })
+      .then((res) => Result.ok(new UserDTO({ ...res.data })))
+      .catch((e: AxiosError) => {
+        console.log('e', e)
+        return Result.fail<{ status: string }>(e.code ?? '500')
+      })
+  }
+
+  #buildEmployeeDTO(employee: UserEntity) {
+    return new UserDTO({
+      firstname: employee.name.split(' ')[0],
+      lastname: employee.name.split(' ')[1],
+      role: employee.type,
+      ...employee,
+    })
   }
 }

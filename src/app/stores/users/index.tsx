@@ -7,6 +7,7 @@ import UserEntity from '../../../domain/entities/UserEntity'
 import CreateEmployeeUseCase from '../../../domain/usecases/CreateEmployeeUseCase'
 import GetAllUsersUseCase from '../../../domain/usecases/GetAllEmployees'
 import LoginUserUseCase from '../../../domain/usecases/LoginUserUseCase'
+import UpdateEmployeeUseCase from '../../../domain/usecases/UpdateEmployeeUseCase'
 import { Result } from '../../../utilities/Result'
 
 interface UserState {
@@ -69,16 +70,28 @@ export const useUsersStore = () => {
         new EmployeesRepository()
       ).execute(user)
       if (result.isSuccess) {
-        state.users.merge([user])
+        state.users.merge([result.getValue() as UserDTO])
         callback && callback(result.getValue() as UserEntity)
       }
     },
 
     async updateEmployee(
-      user: UserDTO,
-      callback?: (result: UserEntity | { error: string } | undefined) => void
+      employee: UserDTO,
+      callback?: (result: Result<UserEntity | { error: string }>) => void
     ) {
-      callback && callback(undefined)
+      const result = await new UpdateEmployeeUseCase(
+        new EmployeesRepository()
+      ).execute(employee)
+      if (result.isSuccess) {
+        const employees = state.users.get()
+        const foundIndex = employees.findIndex((c) => c.id === employee.id)
+        if (foundIndex > -1) {
+          console.log('value', employee)
+          state.users.nested(foundIndex).set(result.getValue() as UserDTO)
+        }
+        callback && callback(result as Result<UserEntity>)
+      }
+      callback && callback(result as Result<{ error: string }>)
     },
 
     async deleteEmployee(

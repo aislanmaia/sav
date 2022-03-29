@@ -9,4 +9,8 @@ export default interface IEmployeesRepository {
   createEmployee(
     user: UserEntity
   ): Promise<Result<UserEntity | { error: string } | { status: string }>>
+
+  updateEmployee(
+    user: UserEntity
+  ): Promise<Result<UserEntity | { error: string } | { status: string }>>
 }

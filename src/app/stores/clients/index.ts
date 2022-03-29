@@ -4,7 +4,7 @@ import ClientsRepository from '../../../data/datasources/ClientsRepository'
 import CreateClient from '../../../domain/usecases/CreateClient'
 import DeleteClient from '../../../domain/usecases/DeleteClient'
 import GetAllClients from '../../../domain/usecases/GetAllClients'
-import UpdateClient from '../../../domain/usecases/UpdateClient'
+import UpdateClientUseCase from '../../../domain/usecases/UpdateClientUseCase'
 import { Result } from '../../../utilities/Result'
 
 interface Address {
@@ -49,9 +49,9 @@ export const useCLientsStore = () => {
       client: Client,
       callback?: (result: Result<Client[]>) => void
     ) {
-      const result = await new UpdateClient(new ClientsRepository()).execute(
-        client
-      )
+      const result = await new UpdateClientUseCase(
+        new ClientsRepository()
+      ).execute(client)
       if (result.isSuccess) {
         const clients = state.clients.get()
         const foundIndex = clients.findIndex((c) => c.id === client.id)
