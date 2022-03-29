@@ -1,24 +1,23 @@
-import { Fragment, Dispatch, SetStateAction, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Client } from '../../stores/clients'
+import { Dispatch, Fragment, SetStateAction } from 'react'
 
 type Props = {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   confirm: Dispatch<SetStateAction<string | number>>
-  clientId: string | number
-  clientName: string
+  employeeId: string | number
+  employeeName: string
 }
 
-const ClientDeleteDialog = ({
+const EmployeeDeleteDialog = ({
   isOpen,
   setIsOpen,
-  clientId,
-  clientName,
+  employeeId,
+  employeeName,
   confirm,
 }: Props) => {
   const handleConfirm = () => {
-    confirm(clientId)
+    confirm(employeeId)
     setIsOpen(false)
   }
 
@@ -49,8 +48,8 @@ const ClientDeleteDialog = ({
               as="h3"
               className="text-lg font-medium leading-6 text-gray-900"
             >
-              <span className="m-0 pr-2 text-2xl">Deletar cliente </span>{' '}
-              <b className="text-1xl">{clientName}</b>
+              <span className="m-0 pr-2 text-2xl">Deletar funcionário </span>{' '}
+              <b className="text-1xl">{employeeName}</b>
             </Dialog.Title>
           </div>
           <Dialog.Description as="div" className="m-2 flex gap-x-10 pt-2">
@@ -83,4 +82,4 @@ const ClientDeleteDialog = ({
   )
 }
 
-export default ClientDeleteDialog
+export default EmployeeDeleteDialog

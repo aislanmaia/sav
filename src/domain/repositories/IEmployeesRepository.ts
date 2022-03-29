@@ -13,4 +13,8 @@ export default interface IEmployeesRepository {
   updateEmployee(
     user: UserEntity
   ): Promise<Result<UserEntity | { error: string } | { status: string }>>
+
+  deleteEmployee(
+    id: string | number
+  ): Promise<Result<UserEntity | { error: string } | { status: string }>>
 }

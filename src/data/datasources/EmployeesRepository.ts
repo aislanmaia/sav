@@ -47,6 +47,18 @@ export default class EmployeesRepository
       })
   }
 
+  async deleteEmployee(
+    id: string | number
+  ): Promise<Result<UserEntity | { error: string } | { status: string }>> {
+    return await this.http
+      .delete(`/employees/${id}`)
+      .then((res) => Result.ok(new UserDTO({ ...res.data })))
+      .catch((err: AxiosError) => {
+        console.log('e', err)
+        return Result.fail<{ status: string }>(err.code ?? '500')
+      })
+  }
+
   #buildEmployeeDTO(employee: UserEntity) {
     return new UserDTO({
       firstname: employee.name.split(' ')[0],

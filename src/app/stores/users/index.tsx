@@ -5,6 +5,7 @@ import UsersRepository from '../../../data/datasources/UsersRepository'
 import UserDTO from '../../../data/dto/UserDTO'
 import UserEntity from '../../../domain/entities/UserEntity'
 import CreateEmployeeUseCase from '../../../domain/usecases/CreateEmployeeUseCase'
+import DeleteEmployeeUseCase from '../../../domain/usecases/DeleteEmployeeUseCase'
 import GetAllUsersUseCase from '../../../domain/usecases/GetAllEmployees'
 import LoginUserUseCase from '../../../domain/usecases/LoginUserUseCase'
 import UpdateEmployeeUseCase from '../../../domain/usecases/UpdateEmployeeUseCase'
@@ -86,7 +87,6 @@ export const useUsersStore = () => {
         const employees = state.users.get()
         const foundIndex = employees.findIndex((c) => c.id === employee.id)
         if (foundIndex > -1) {
-          console.log('value', employee)
           state.users.nested(foundIndex).set(result.getValue() as UserDTO)
         }
         callback && callback(result as Result<UserEntity>)
@@ -96,11 +96,24 @@ export const useUsersStore = () => {
 
     async deleteEmployee(
       id: string | number,
-      callback?: (
-        result: Result<UserDTO | { error: string }> | undefined
-      ) => void
+      callback?: (result: Result<UserDTO | string>) => void
     ) {
-      callback && callback(undefined)
+      const result = await new DeleteEmployeeUseCase(
+        new EmployeesRepository()
+      ).execute(id)
+      if (result.isSuccess) {
+        const employees = state.users.get()
+        const foundIndex = employees.findIndex((employee) => employee.id === id)
+        if (foundIndex > -1) {
+          state.users.set((employee) => {
+            employee.splice(foundIndex, 1)
+            return employee
+          })
+        }
+
+        callback && callback(result as Result<UserDTO>)
+      }
+      callback && callback(result as unknown as Result<string>)
     },
   }
 }

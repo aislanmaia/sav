@@ -1,11 +1,10 @@
-import { Client, useCLientsStore } from '../../stores/clients'
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid'
 // import { useState } from '@hookstate/core'
 import { useState } from 'react'
-import EmployeeUpdateDialog from './EmployeeUpdateDialog'
-import ClientDeleteDialog from './ClientDeleteDialog'
-import { useUsersStore } from '../../stores/users'
 import UserDTO from '../../../data/dto/UserDTO'
+import { useUsersStore } from '../../stores/users'
+import EmployeeDeleteDialog from './EmployeeDeleteDialog'
+import EmployeeUpdateDialog from './EmployeeUpdateDialog'
 
 type Props = {
   employee: UserDTO
@@ -42,8 +41,8 @@ const EmployeesListItem = ({ employee }: Props) => {
     await usersStore.updateEmployee(data)
   }
 
-  const deleteUser = async (id: string | number) => {
-    // await usersStore.deleteUser(id)
+  const deleteEmployee = async (id: string | number) => {
+    await usersStore.deleteEmployee(id)
   }
 
   return (
@@ -77,14 +76,14 @@ const EmployeesListItem = ({ employee }: Props) => {
         setIsOpen={(value) => setShowUpdateDialog(value)}
         confirm={(employee) => updateEmployee(employee as UserDTO)}
       />
-      {/*<ClientDeleteDialog
+      <EmployeeDeleteDialog
         isOpen={showDeleteDialog}
-        key={Math.random() * 100000}
-        clientId={client.id!}
-        clientName={client.name}
+        key={employee.id}
+        employeeId={employee.id!}
+        employeeName={employee.name}
         setIsOpen={(value) => setShowDeleteDialog(value)}
-        confirm={(clientId) => deleteClient(clientId as string)}
-      /> */}
+        confirm={(employeeId) => deleteEmployee(employeeId as string)}
+      />
     </>
   )
 }
