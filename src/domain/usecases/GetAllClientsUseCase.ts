@@ -5,7 +5,9 @@ import IClientsRepository from '../repositories/IClientsRepository'
 
 type GetAllClientsParams = {}
 
-export default class GetAllClients implements IUseCase<void, ClientEntity[]> {
+export default class GetAllClientsUseCase
+  implements IUseCase<void, ClientEntity[]>
+{
   constructor(private repository: IClientsRepository) {}
 
   async execute(): Promise<Result<ClientEntity[]>> {

@@ -1,9 +1,9 @@
 import { createState, Downgraded, useState } from '@hookstate/core'
 import { Persistence } from '@hookstate/persistence'
 import ClientsRepository from '../../../data/datasources/ClientsRepository'
-import CreateClient from '../../../domain/usecases/CreateClient'
-import DeleteClient from '../../../domain/usecases/DeleteClient'
-import GetAllClients from '../../../domain/usecases/GetAllClients'
+import CreateClientUseCase from '../../../domain/usecases/CreateClientUseCase'
+import DeleteClientUseCase from '../../../domain/usecases/DeleteClientUseCase'
+import GetAllClientsUseCase from '../../../domain/usecases/GetAllClientsUseCase'
 import UpdateClientUseCase from '../../../domain/usecases/UpdateClientUseCase'
 import { Result } from '../../../utilities/Result'
 
@@ -39,7 +39,9 @@ export const useCLientsStore = () => {
   return {
     get: () => state.value,
     async getAllClients(callback?: (result: Result<Client[]>) => void) {
-      const result = await new GetAllClients(new ClientsRepository()).execute()
+      const result = await new GetAllClientsUseCase(
+        new ClientsRepository()
+      ).execute()
       if (result.isSuccess) {
         state.clients.set(result.getValue() || [])
         callback && callback(result)
@@ -63,21 +65,24 @@ export const useCLientsStore = () => {
     },
     async createClient(
       client: Client,
-      callback?: (result: Result<Client[]>) => void
+      callback?: (result: Result<Client>) => void
     ) {
-      const result = await new CreateClient(new ClientsRepository()).execute(
-        client
-      )
+      const result = await new CreateClientUseCase(
+        new ClientsRepository()
+      ).execute(client)
+      console.log('client', client)
       if (result.isSuccess) {
-        state.clients.merge([client])
-        callback && callback(result)
+        state.clients.merge([result.getValue() as Client])
       }
+      callback && callback(result)
     },
     async deleteClient(
       id: string | number,
       callback?: (result: Result<Client[]>) => void
     ) {
-      const result = await new DeleteClient(new ClientsRepository()).execute(id)
+      const result = await new DeleteClientUseCase(
+        new ClientsRepository()
+      ).execute(id)
       if (result.isSuccess) {
         const clients = state.clients.get()
         const foundIndex = clients.findIndex((c) => c.id === id)
