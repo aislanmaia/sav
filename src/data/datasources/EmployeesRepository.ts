@@ -52,10 +52,16 @@ export default class EmployeesRepository
   ): Promise<Result<UserEntity | { error: string } | { status: string }>> {
     return await this.http
       .delete(`/employees/${id}`)
-      .then((res) => Result.ok(new UserDTO({ ...res.data })))
+      .then((res) => {
+        console.log('repository res', res)
+        return Result.ok(new UserDTO({ ...res.data }))
+      })
       .catch((err: AxiosError) => {
         console.log('e', err)
-        return Result.fail<{ status: string }>(err.code ?? '500')
+        console.log(err.response)
+        return Result.fail<{ status: string }>(
+          err.response?.status.toString() ?? '500'
+        )
       })
   }
 

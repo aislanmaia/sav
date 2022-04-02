@@ -10,6 +10,7 @@ export default class UserDTO extends UserEntity {
   public role: UserRoles
   public password?: string
   public passwordConfirmation?: string
+  public token?: string
 
   constructor({
     email,
@@ -20,6 +21,7 @@ export default class UserDTO extends UserEntity {
     password,
     passwordConfirmation,
     id,
+    token,
   }: {
     email: string
     role: UserRoles
@@ -29,6 +31,7 @@ export default class UserDTO extends UserEntity {
     password?: string
     passwordConfirmation?: string
     id?: number
+    token?: string
   }) {
     super({ email, type: role, registry, id, name: '' })
     this.id = id
@@ -41,6 +44,7 @@ export default class UserDTO extends UserEntity {
     this.name = `${this.firstname} ${this.lastname}`
     this.password = password
     this.passwordConfirmation = passwordConfirmation
+    this.token = token
   }
 
   static parseToUserRole(role: string) {

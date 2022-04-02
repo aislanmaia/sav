@@ -2,7 +2,7 @@ import EmailValidator from '../../utilities/EmailValidator'
 import { Result } from '../../utilities/Result'
 import { IUserEntity, UserRoles } from './IUserEntity'
 
-export default class UserEntity implements IUserEntity {
+export default class UserEntity extends IUserEntity {
   public id?: number
   public email: string
   public type: UserRoles
@@ -28,6 +28,7 @@ export default class UserEntity implements IUserEntity {
     passwordConfirmation?: string
     id?: number
   }) {
+    super(email, name, type, registry, id)
     this.id = id
     this.email = email
     this.type = type

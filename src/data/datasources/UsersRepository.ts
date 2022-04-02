@@ -2,6 +2,7 @@ import { AxiosError } from 'axios'
 import UserEntity from '../../domain/entities/UserEntity'
 import IUsersRepository from '../../domain/repositories/IUsersRepository'
 import { Result } from '../../utilities/Result'
+import UserDTO from '../dto/UserDTO'
 import HttpClient from './HttpClient'
 
 export default class UsersRepository
@@ -13,17 +14,15 @@ export default class UsersRepository
     password: string
   ): Promise<Result<UserEntity | { error: string } | { status: string }>> {
     return await this.http
-      .post<Result<UserEntity | { error: string } | { status: string }>>(
-        '/login',
-        {
-          email: email,
-          password: password,
-        }
-      )
+      .post('/login', {
+        email: email,
+        password: password,
+      })
       .then((res) => {
-        if (res.data.error)
+        console.log('res', res)
+        if (res.data?.error)
           return Result.fail<{ error: string }>(res.data.error)
-        return res.data
+        return Result.ok(res.data as UserDTO)
       })
       .catch((e: AxiosError) => {
         console.log('e', e)

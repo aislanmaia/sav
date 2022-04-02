@@ -10,7 +10,7 @@ export default class DeleteEmployeeUseCase
 
   async execute(employeeId: string | number): Promise<Result<UserEntity>> {
     const result = await this.repository.deleteEmployee(employeeId)
-
+    console.log(result)
     if (result.isFailure) return Result.fail('Cannot delete employee')
     return result as Result<UserEntity>
   }

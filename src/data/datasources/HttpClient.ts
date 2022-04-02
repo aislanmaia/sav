@@ -22,7 +22,7 @@ export default abstract class HttpClient {
 
   #initializeResponseInterceptor() {
     this.http.interceptors.request.use(this.#handleRequest, this.#handleError)
-    // this.http.interceptors.response.use(this.#handleResponse, this.#handleError)
+    this.http.interceptors.response.use(this.#handleResponse, this.#handleError)
   }
 
   #handleRequest = (config: AxiosRequestConfig) => {
@@ -33,6 +33,12 @@ export default abstract class HttpClient {
     return config
   }
 
-  #handleResponse = ({ data }: AxiosResponse) => data
-  #handleError = (error: AxiosError) => error
+  #handleResponse = (response: AxiosResponse) => response
+  #handleError = (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('users')
+      window.location.href = '/login'
+    }
+    return Promise.reject(error)
+  }
 }

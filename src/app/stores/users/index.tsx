@@ -30,17 +30,18 @@ export const useUsersStore = () => {
     get: () => state.value,
     async signIn(
       params: { email: string; password: string },
-      callback: (result: Result<UserEntity>) => void
+      callback: (result: Result<UserDTO>) => void
     ) {
       const result = await new LoginUserUseCase(new UsersRepository()).execute(
         params
       )
       if (result.isSuccess) {
-        state.user.set(result.getValue() as UserDTO)
-        callback(result)
+        const user = result.getValue() as UserDTO
+        state.user.set(user)
+        callback(result as Result<UserDTO>)
       } else {
         state.user.set(undefined)
-        callback(result)
+        callback(result as Result<UserDTO>)
       }
     },
 
@@ -102,6 +103,7 @@ export const useUsersStore = () => {
         new EmployeesRepository()
       ).execute(id)
       if (result.isSuccess) {
+        console.log('result', result)
         const employees = state.users.get()
         const foundIndex = employees.findIndex((employee) => employee.id === id)
         if (foundIndex > -1) {

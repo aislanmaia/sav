@@ -21,8 +21,8 @@ export default class LoginUserUseCase
       credentials.password
     )
     if (result.isFailure) {
-      return Result.fail('Cannot login user')
+      return Result.fail(result.getValue() as unknown as string)
     }
-    return Result.ok(result) as unknown as Result<UserEntity>
+    return result as unknown as Result<UserEntity>
   }
 }
