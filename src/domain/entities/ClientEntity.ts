@@ -10,7 +10,7 @@ interface AddressProps {
 }
 
 export default class ClientEntity {
-  public id?: number
+  public id?: number | string
   public name: string
   public email: string
   public phone: number

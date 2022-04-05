@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react'
-// import UserDTO from '../../data/dto/UserDTO'
-// import EmployeeNewDialog from '../components/employees/EmployeeNewDialog'
+// import ScheduleDTO from '../../data/dto/ScheduleDTO'
+import ScheduleNewDialog from '../components/schedules/ScheduleNewDialog'
 
-// import EmployeesList from '../components/employees/EmployeesList'
 import SchedulesList from '../components/schedules/SchedulesList'
-// import { useUsersStore } from '../stores/users'
+// import { useSchedulesStore } from '../stores/schedules'
 
 const Schedules = () => {
   const [showNewDialog, setShowNewDialog] = useState(false)
-  // const employeesStore = useUsersStore()
+  // const schedulesStore = useSchedulesStore()
 
-  // const createEmployee = (data: UserDTO) => {
-  //   console.log('data', data)
-  //   employeesStore.createEmployee(data)
-  // }
+  const createSchedule = (/*data: ScheduleDTO*/) => {
+    // console.log('data', data)
+    // schedulesStore.createSchedule(data)
+  }
 
   useEffect(() => {
     // employeesStore.getAllUsers()
@@ -32,12 +31,15 @@ const Schedules = () => {
       </div>
       <div>
         <SchedulesList key={Math.random() * 10000000} />
-        {/* <EmployeeNewDialog
-          isOpen={showNewDialog}
-          key={Math.random() * 100000}
-          setIsOpen={(value) => setShowNewDialog(value)}
-          confirm={(employee) => createEmployee(employee as UserDTO)}
-        /> */}
+        {showNewDialog ? (
+          <ScheduleNewDialog
+            isOpen={showNewDialog}
+            key={Math.random() * 100000}
+            setIsOpen={(value) => setShowNewDialog(value)}
+            // confirm={(schedule) => createSchedule(schedule as ScheduleDTO)}
+            confirm={(schedule) => console.log('create schedule', schedule)}
+          />
+        ) : null}
       </div>
     </div>
   )

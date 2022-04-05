@@ -3,12 +3,12 @@ import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { UserRoles } from '../../../domain/entities/IUserEntity'
 
-type EmployeeOption = {
+type ClientOption = {
   value: string
   label: string
 }
 
-// const options: EmployeeOption[] = []
+// const options: ClientOption[] = []
 
 // type Option = {
 //   name: string
@@ -20,13 +20,13 @@ type EmployeeOption = {
 // }
 
 type Props = {
-  selected?: EmployeeOption
-  onChange: Dispatch<SetStateAction<EmployeeOption>>
-  options: EmployeeOption[]
+  selected?: ClientOption
+  onChange: Dispatch<SetStateAction<ClientOption>>
+  options: ClientOption[]
 }
 
-const ScheduleEmployeeSelect = ({ selected, onChange, options }: Props) => {
-  // const buildOptions = (options: EmployeeOption[]): { value: string }[] => {
+const ScheduleClientSelect = ({ selected, onChange, options }: Props) => {
+  // const buildOptions = (options: ClientOption[]): { value: string }[] => {
   //   return options.map((option) => {
   //     if (option.value === UserRoles.Attendant) return { value: 'Atendente' }
   //     if (option.value === UserRoles.Technician) return { value: 'Técnico' }
@@ -38,9 +38,9 @@ const ScheduleEmployeeSelect = ({ selected, onChange, options }: Props) => {
   //   if (value === UserRoles.Technician) return 'Técnico'
   //   return 'Atendente'
   // }
-  const defaultValue: EmployeeOption = {
+  const defaultValue: ClientOption = {
     value: '',
-    label: 'Selecione um Funcionário',
+    label: 'Selecione um cliente',
   }
 
   // const [selected, setSelected] = useState(buildOptions(options)[0])
@@ -68,7 +68,7 @@ const ScheduleEmployeeSelect = ({ selected, onChange, options }: Props) => {
               {options.map((option, optionIndex) => (
                 <Listbox.Option
                   key={optionIndex}
-                  className={({ active, selected }) =>
+                  className={({ active }) =>
                     `relative cursor-default select-none py-2 pl-10 pr-4 ${
                       active ? 'bg-indigo-500 text-white' : 'text-gray-900'
                     }`
@@ -101,4 +101,4 @@ const ScheduleEmployeeSelect = ({ selected, onChange, options }: Props) => {
   )
 }
 
-export default ScheduleEmployeeSelect
+export default ScheduleClientSelect

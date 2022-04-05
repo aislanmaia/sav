@@ -5,7 +5,7 @@ export enum UserRoles {
 }
 
 export abstract class IUserEntity {
-  id?: number
+  id?: number | string
   email: string
   type: UserRoles
   registry: number

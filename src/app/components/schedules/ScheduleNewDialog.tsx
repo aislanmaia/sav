@@ -1,40 +1,104 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Dispatch, Fragment, SetStateAction, useState } from 'react'
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
+import ScheduleDTO, {
+  ClientInfoDTO,
+  EmployeeInfoDTO,
+} from '../../../data/dto/ScheduleDTO'
 import UserDTO from '../../../data/dto/UserDTO'
+import ClientEntity from '../../../domain/entities/ClientEntity'
+import { ScheduleStatus } from '../../../domain/entities/IScheduleEntity'
 import { UserRoles } from '../../../domain/entities/IUserEntity'
-import EmployeesRoleSelect from './EmployeesRoleSelect'
+import { Result } from '../../../utilities/Result'
+import { Client, useCLientsStore } from '../../stores/clients'
+import { useUsersStore } from '../../stores/users'
+import ScheduleClientSelect from './ScheduleClientSelect'
+import ScheduleEmployeeSelect from './ScheduleEmployeeSelect'
+import EmployeesRoleSelect from './ScheduleEmployeeSelect'
+import ScheduleStatusSelect from './ScheduleStatusSelect'
 
 type Props = {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
-  confirm: Dispatch<SetStateAction<UserDTO>>
+  confirm: Dispatch<SetStateAction<ScheduleDTO>>
 }
 
-const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
-  let [firstName, setFirstName] = useState('')
-  let [lastName, setLastName] = useState('')
-  let [email, setEmail] = useState('')
-  let [registry, setRegistry] = useState('')
-  let [password, setPassword] = useState('')
-  let [passwordConfirmation, setPasswordConfirmation] = useState('')
-  let [role, setRole] = useState(UserRoles.Attendant)
+const ScheduleNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
+  let [clients, setClients] = useState([] as { value: string; label: string }[])
+  let [employees, setEmployees] = useState(
+    [] as { value: string; label: string }[]
+  )
+  let [client, setClientInfo] = useState({
+    value: '',
+    label: 'Selecione um cliente',
+  })
+  let [employee, setEmployeeInfo] = useState({
+    value: '',
+    label: 'Selecione um funcionário',
+  })
+  let [description, setDescription] = useState('')
+  let [datetime, setDatetime] = useState('')
+  let [datetimeError, setDatetimeError] = useState('')
+  let [status, setStatus] = useState(ScheduleStatus.Open)
+
+  const buildClients = (clientsList: Client[]) => {
+    const clients = clientsList.map((client) => ({
+      value: client.id?.toString() || '',
+      label: client.name,
+    }))
+    setClients(clients)
+  }
+
+  const buildEmployees = (employeesList: UserDTO[]) => {
+    const employees = employeesList.map((employees) => ({
+      value: employees.id?.toString() || '',
+      label: employees.name,
+    }))
+    setEmployees(employees)
+  }
+
+  const clientsStore = useCLientsStore()
+  const employeesStore = useUsersStore()
+
+  useEffect(() => {
+    console.log('use effect')
+    clientsStore.getAllClients().then((_) => {
+      buildClients(clientsStore.get().clients)
+    })
+
+    employeesStore.getAllUsers().then((_) => {
+      buildEmployees(employeesStore.get().users)
+    })
+  }, [])
+
+  const handleDateTime = (datetime: string) => {
+    console.log('datetime', datetime)
+    const dateIsValid = ScheduleDTO.validateDatetime(new Date(datetime))
+    console.log('dateIsValid', dateIsValid)
+    if (dateIsValid instanceof Result) {
+      setDatetime('')
+      setDatetimeError(dateIsValid.error ?? '')
+    } else {
+      setDatetime(datetime)
+      setDatetimeError('')
+    }
+  }
 
   const handleConfirm = () => {
-    const newEmployee: UserDTO = new UserDTO({
-      email,
-      registry: Number(registry),
-      firstname: firstName,
-      lastname: lastName,
-      role: role,
-      password,
-      passwordConfirmation,
-    })
-    confirm(newEmployee)
+    // const newEmployee: ScheduleDTO = new ScheduleDTO({
+    //   email,
+    //   registry: Number(registry),
+    //   firstname: firstName,
+    //   lastname: lastName,
+    //   role: role,
+    //   password,
+    //   passwordConfirmation,
+    // })
+    // confirm(newEmployee)
     setIsOpen(false)
   }
 
   const buildRole = ({ value }: { value: string }) => {
-    setRole(UserDTO.parseToUserRole(value))
+    setStatus(ScheduleStatus.Open)
   }
 
   return (
@@ -64,138 +128,77 @@ const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
               as="h3"
               className="text-lg font-medium leading-6 text-gray-900"
             >
-              <span className="m-0 pr-2 text-2xl">Novo Funcionário </span>{' '}
+              <span className="m-0 pr-2 text-2xl">Novo Agendamento</span>
             </Dialog.Title>
           </div>
           <Dialog.Description as="div" className="m-2 flex gap-x-10 pt-2">
             <div className="flex flex-auto">
               <div className="flex flex-auto flex-col">
-                <div className="text-1xl pb-4 font-semibold">
+                {/* <div className="text-1xl pb-4 font-semibold">
                   Dados Pessoais
-                </div>
+                </div> */}
                 <div className="mb-6">
                   <label
-                    htmlFor="firstName"
+                    htmlFor="clientId"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Primeiro Nome
+                    Cliente
                   </label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    value={firstName}
-                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Primeiro nome do funcionário"
-                    onChange={(e) => setFirstName(e.target.value)}
+                  <ScheduleClientSelect
+                    selected={client}
+                    onChange={(selected) => setClientInfo(selected)}
+                    options={clients}
                   />
                 </div>
                 <div className="mb-6">
                   <label
-                    htmlFor="lastName"
+                    htmlFor="description"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Sobrenome
+                    Descrição
                   </label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="firstName"
-                    value={lastName}
+                  <textarea
+                    id="description"
+                    name="description"
+                    value={description}
                     className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Sobrenome do funcionário"
-                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Descrição"
+                    onChange={(e) => setDescription(e.target.value)}
                   />
                 </div>
                 <div className="mb-6">
                   <label
-                    htmlFor="email"
+                    htmlFor="employee"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Email
+                    Funcionário
                   </label>
-                  <input
-                    type="text"
-                    id="email"
-                    name="email"
-                    value={email}
-                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Email do funcionário"
-                    onChange={(e) => setEmail(e.target.value)}
+                  <ScheduleEmployeeSelect
+                    selected={employee}
+                    onChange={(selected) => setEmployeeInfo(selected)}
+                    options={employees}
                   />
                 </div>
                 <div className="mb-6">
                   <label
-                    htmlFor="registry"
+                    htmlFor="datetime"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Matrícula
+                    Data e Hora da visita
                   </label>
                   <input
-                    type="text"
-                    id="registry"
-                    name="registry"
-                    value={registry}
+                    type="datetime-local"
+                    id="datetime"
+                    name="datetime"
+                    value={datetime}
                     className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
                     placeholder="Número da matrícula"
-                    onChange={(e) => setRegistry(e.target.value)}
+                    onChange={(e) => handleDateTime(e.target.value)}
+                    // onBlur={(e) => handleDateTime(e.target.value)}
                   />
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-auto ">
-              <div className="flex flex-auto flex-col">
-                <div className="text-1xl pb-4 font-semibold">
-                  Dados de Usuário
-                </div>
-
-                <div className="mb-6">
-                  <label
-                    htmlFor="password"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Senha de acesso
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={password}
-                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Senha de acesso"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <div className="mb-6">
-                  <label
-                    htmlFor="passwordConfirmation"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Confirmação de senha
-                  </label>
-                  <input
-                    type="password"
-                    id="passwordConfirmation"
-                    name="passwordConfirmation"
-                    value={passwordConfirmation}
-                    className="focus:shadow-outline w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow-sm focus:outline-none"
-                    placeholder="Redigite a senha"
-                    onChange={(e) => setPasswordConfirmation(e.target.value)}
-                  />
-                </div>
-                <div className="mb-6">
-                  <label
-                    htmlFor="name"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Nível de acesso
-                  </label>
-                  <EmployeesRoleSelect
-                    selected={{ value: role }}
-                    onChange={(selected) =>
-                      buildRole(selected as { value: string })
-                    }
-                  />
+                  {datetimeError && (
+                    <span className="text-red-400">{datetimeError}</span>
+                  )}
                 </div>
               </div>
             </div>
@@ -221,4 +224,4 @@ const EmployeeNewDialog = ({ isOpen, setIsOpen, confirm }: Props) => {
   )
 }
 
-export default EmployeeNewDialog
+export default ScheduleNewDialog
